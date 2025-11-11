@@ -4,6 +4,8 @@ import morgan from "morgan";   //Morgan perseva os pedidos de header HTTP num fi
 import cors from "cors";       //Permite suprimir os erros de CORS dos browsers
 import dotenv from "dotenv";   //Acesso as variaveis de ambiente do ficheiro .env
 
+import productRoutes from "./routes/productRoutes.js";
+
 dotenv.config();
 
 const app = express();
@@ -14,9 +16,7 @@ app.use(cors());
 app.use(helmet());
 app.use(morgan("dev"));
 
-app.get("/", (req,res)=>{
-    res.send("Resposta do backend")
-})
+app.use("/router", productRoutes)
 
 app.listen(PORT,()=>{
     console.log("Servidor ExpressJS ativo na port "+PORT)
