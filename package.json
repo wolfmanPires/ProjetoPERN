@@ -1,9 +1,9 @@
 {
   "name": "projetopern",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "backend/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon backend/server.js"
   },
   "repository": {
     "type": "git",
@@ -11,6 +11,7 @@
   },
   "keywords": [],
   "author": "",
+  "type": "module",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/wolfmanPires/ProjetoPERN/issues"
@@ -25,5 +26,8 @@
     "express": "^5.1.0",
     "helmet": "^8.1.0",
     "morgan": "^1.10.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
   }
 }
