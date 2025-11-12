@@ -5,6 +5,7 @@ import cors from "cors";       //Permite suprimir os erros de CORS dos browsers
 import dotenv from "dotenv";   //Acesso as variaveis de ambiente do ficheiro .env
 
 import productRoutes from "./routes/productRoutes.js";
+import pool from "./config/db.js"
 
 dotenv.config();
 
@@ -18,6 +19,25 @@ app.use(morgan("dev"));
 
 app.use("/router", productRoutes)
 
-app.listen(PORT,()=>{
-    console.log("Servidor ExpressJS ativo na port "+PORT)
+//Funcao que verifica se ha a DB no sistema, caso nao entao vai criar as tabelas necessarias
+async function initDB() {
+    try{
+        await pool.query(`
+            CREATE TABLE IF NOT EXISTS products(
+                id SERIAL PRIMARY KEY,
+                name VARCHAR(255) NOT NULL,
+                image VARCHAR(255) NOT NULL,
+                price DECIMAL(10,2) NOT NULL,
+                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+            )
+            `)
+    }catch(err){
+        console.log("Erro na funcao initDB de server.js", err)
+    }
+}
+
+initDB().then(() => {
+    app.listen(PORT,()=>{
+        console.log("Servidor ExpressJS ativo na port "+PORT)
+    })
 })
