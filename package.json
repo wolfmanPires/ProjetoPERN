@@ -1,34 +1,36 @@
 {
-  "name": "projetopern",
+  "name": "pernteste",
   "version": "1.0.0",
   "main": "backend/server.js",
   "scripts": {
     "dev": "nodemon backend/server.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/wolfmanPires/ProjetoPERN.git"
-  },
   "keywords": [],
   "author": "",
   "type": "module",
   "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/wolfmanPires/ProjetoPERN/issues"
-  },
-  "homepage": "https://github.com/wolfmanPires/ProjetoPERN#readme",
   "description": "",
   "dependencies": {
-    "@arcjet/node": "^1.0.0-beta.14",
-    "@neondatabase/serverless": "^1.0.2",
-    "cors": "^2.8.5",
+    "@tailwindcss/vite": "^4.2.0",
+    "argon2": "^0.44.0",
+    "axios": "^1.13.5",
+    "connect-pg-simple": "^10.0.0",
+    "cors": "^2.8.6",
     "dotenv": "^17.2.3",
-    "express": "^5.1.0",
+    "express": "^5.2.1",
+    "express-session": "^1.19.0",
     "helmet": "^8.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "lucide-react": "^0.575.0",
     "morgan": "^1.10.1",
-    "pg": "^8.16.3"
+    "pg": "^8.18.0",
+    "react-day-picker": "^9.14.0",
+    "react-hot-toast": "^2.6.0",
+    "react-router-dom": "^7.13.1",
+    "tailwindcss": "^4.2.0",
+    "zustand": "^5.0.11"
   },
   "devDependencies": {
-    "nodemon": "^3.1.10"
+    "nodemon": "^3.1.11"
   }
 }

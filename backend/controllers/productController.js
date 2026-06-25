@@ -1,6 +1,6 @@
 import pool from "../config/db.js"
 
-//sistema de verificacao com erros (nao deixar DB ser corrompida)
+//sistema de verificacao com erros (nao deixar DB ser corrompida ou sujeita a decisoes mas)
 
 /////////
 /////GET
@@ -18,15 +18,15 @@ export const getAllProducts = async (req,res) => {
     }
 }
 
-//receber um elemento especifico da tabela dos produtos pelo ID
+//receber um elemento especifico da tabela dos produtos pelo id
 export const getProduct = async (req,res) => {
-    const {ID} = req.params;
+    const {id} = req.params;
 
     try{
-        if(!ID){
-            res.status(400).json({message: "ID não existente, por favor tente outro"})
+        if(!id){
+            res.status(400).json({message: "id não existente, por favor tente outro"})
         }else{
-            const RESULT = await pool.query("SELECT * FROM products WHERE id=$1", [ID]);
+            const RESULT = await pool.query(`SELECT * FROM products WHERE id=$1`, [id]);
             res.status(200).json(RESULT.rows);
         }
     }catch (err){
@@ -42,13 +42,13 @@ export const getProduct = async (req,res) => {
 
 //criar um novo produto na base de dados
 export const createProduct = async (req,res) => {
-    const {NAME,PRICE,IMAGE} = req.body;
+    const {name,price,image} = req.body;
 
     try{
-        if(!NAME || !PRICE || !IMAGE){
+        if(!name || !price || !image){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("INSERT INTO products (name, price, image) VALUES ($1,$2,$3) RETURNING *", [NAME,PRICE,IMAGE]);
+            const RESULT = await pool.query("INSERT INTO products (name, price, image) VALUES ($1,$2,$3) RETURNING *", [name,price,image]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
@@ -62,16 +62,16 @@ export const createProduct = async (req,res) => {
 /////PUT
 /////////
 
-//atualizar um produto com os dados novos pelo ID
+//atualizar um produto com os dados novos pelo id
 export const updateProduct = async (req,res) => {
-    const {NAME,PRICE,IMAGE} = req.body;
-    const {ID} = req.params;
+    const {name,price,image} = req.body;
+    const {id} = req.params;
 
     try{
-        if(!NAME || !PRICE || !IMAGE || !ID){
+        if(!name || !price || !image || !id){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("UPDATE products SET name=$1, price=$2, image=$3 WHERE id=$4 RETURNING *", [NAME,PRICE,IMAGE,ID]);
+            const RESULT = await pool.query("UPDATE products SET name=$1, price=$2, image=$3 WHERE id=$4 RETURNING *", [name,price,image,id]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
@@ -85,20 +85,20 @@ export const updateProduct = async (req,res) => {
 /////DELETE
 ////////////
 
-//apagar um produto atraves do seu ID
+//apagar um produto atraves do seu id
 export const deleteProduct = async (req,res) => {
-    const {ID} = req.params;
+    const {id} = req.params;
 
     try{
-        if(!ID){
-            res.status(400).json({message: "ID não existente, por favor tente outro"})
+        if(!id){
+            res.status(400).json({message: "id não existente, por favor tente outro"})
         }else{
-            const RESULT = await pool.query("DELETE FROM products WHERE id=$1 RETURNING *", [ID]);
+            const RESULT = await pool.query("DELETE FROM products WHERE id=$1 RETURNING *", [id]);
             res.status(200).json(RESULT.rows[0]);
         }
     }catch (err){
-        console.error("Erro detetado no createProduct do productController.js: ",err);
+        console.error("Erro detetado no deleteProduct do productController.js: ",err);
         //Enviar codigo de erro interno de servidor 
-        res.status(500).json({message: "Erro detetado no createProduct do productController.js"})
+        res.status(500).json({message: "Erro detetado no deleteProduct do productController.js"})
     }
 }
