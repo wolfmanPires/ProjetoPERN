@@ -1,5 +1,5 @@
 
-//Imports dos pactos de dependencias
+//Imports dos pacotes de dependencias
 import express from "express";
 import helmet from "helmet";    //Helmet e um middleware de seguranca que facilita a configuracao de ferramentas de protecao da app atraves de headers HTTP
 import morgan from "morgan";    //Morgan escreve os pedidos de header HTTP feitos na consola
@@ -20,7 +20,19 @@ import avaliacoes_futurasRoutes from "./routes/avaliacoes_futurasRoutes.js"
 import notasRoutes from "./routes/notasRoutes.js"
 import loginRoutes from "./routes/LoginRoutes.js"
 import activeSessionRoutes from "./routes/activeSessionRoutes.js"
+import gestorSessionRoutes from "./routes/gestorSessionRoutes.js"
+import utilizadorComprasRoutes from "./routes/utilizadorComprasRoutes.js"
+import gestorRoutes from "./routes/gestorRoutes.js"
+import carrinhoRoutes from "./routes/carrinhoRoutes.js"
+import carrinhoProductsRoutes from "./routes/carrinho_productsRoutes.js"
+import encomendaRoutes from "./routes/encomendaRoutes.js"
+import encomendaProductsRoutes from "./routes/encomenda_productsRoutes.js"
+import activeStoreSessionRoutes from "./routes/activeStoreSessionRoutes.js"
+import storeAuthRoutes from "./routes/storeAuthRoutes.js"
+
+//Configuracao das ligacoes e verificacoes da BD
 import pool from "./config/db.js"
+import "./middleware/recorrenciaCron.js"
 
 dotenv.config();
 const app = express();
@@ -52,7 +64,18 @@ app.use(session({
     }
 }));
 
+//Routes para a loja
 app.use("/api/products", productRoutes);
+app.use("/api/utilizadorCompras", utilizadorComprasRoutes);
+app.use("/api/gestor", gestorRoutes);
+app.use("/api/carrinho", carrinhoRoutes);
+app.use("/api/carrinhoProducts", carrinhoProductsRoutes);
+app.use("/api/encomenda", encomendaRoutes);
+app.use("/api/encomendaProducts", encomendaProductsRoutes);
+app.use("/api/activeStoreSession", activeStoreSessionRoutes);
+app.use("/api/store-auth", storeAuthRoutes);
+
+//Routes para o centro
 app.use("/api/utilizador", utilizadorRoutes);
 app.use("/api/disciplina", disciplinaRoutes);
 app.use("/api/explicador", explicadorRoutes);
@@ -63,16 +86,18 @@ app.use("/api/avalFuturas", avaliacoes_futurasRoutes);
 app.use("/api/logreg", loginRoutes);
 app.use("/api/notas", notasRoutes);
 app.use("/api/activeSession", activeSessionRoutes);
+app.use("/api/gestorSession", gestorSessionRoutes);
 
 //Funcao que verifica se ha a DB no sistema, caso nao entao vai criar as tabelas necessarias
 async function initDB() {
     try{
         await pool.query(`
             CREATE TABLE IF NOT EXISTS products(
-                id SERIAL PRIMARY KEY,
+                id_products SERIAL PRIMARY KEY,
                 name VARCHAR(255) NOT NULL,
                 image VARCHAR(255) NOT NULL,
                 price DECIMAL(10,2) NOT NULL,
+                stock INT DEFAULT 0,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
             `)

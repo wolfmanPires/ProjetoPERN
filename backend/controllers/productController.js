@@ -26,7 +26,7 @@ export const getProduct = async (req,res) => {
         if(!id){
             res.status(400).json({message: "id não existente, por favor tente outro"})
         }else{
-            const RESULT = await pool.query(`SELECT * FROM products WHERE id=$1`, [id]);
+            const RESULT = await pool.query(`SELECT * FROM products WHERE id_products=$1`, [id]);
             res.status(200).json(RESULT.rows);
         }
     }catch (err){
@@ -42,13 +42,13 @@ export const getProduct = async (req,res) => {
 
 //criar um novo produto na base de dados
 export const createProduct = async (req,res) => {
-    const {name,price,image} = req.body;
+    const {name,price,image,stock,description} = req.body;
 
     try{
         if(!name || !price || !image){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("INSERT INTO products (name, price, image) VALUES ($1,$2,$3) RETURNING *", [name,price,image]);
+            const RESULT = await pool.query("INSERT INTO products (name, price, image, stock, description) VALUES ($1,$2,$3,$4,$5) RETURNING *", [name,price,image,stock,description]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
@@ -64,14 +64,14 @@ export const createProduct = async (req,res) => {
 
 //atualizar um produto com os dados novos pelo id
 export const updateProduct = async (req,res) => {
-    const {name,price,image} = req.body;
+    const {name,price,image,stock,description} = req.body;
     const {id} = req.params;
 
     try{
         if(!name || !price || !image || !id){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("UPDATE products SET name=$1, price=$2, image=$3 WHERE id=$4 RETURNING *", [name,price,image,id]);
+            const RESULT = await pool.query("UPDATE products SET name=$1, price=$2, image=$3, stock=$4, description=$5 WHERE id_products=$6 RETURNING *", [name,price,image,stock,description,id]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
@@ -93,7 +93,7 @@ export const deleteProduct = async (req,res) => {
         if(!id){
             res.status(400).json({message: "id não existente, por favor tente outro"})
         }else{
-            const RESULT = await pool.query("DELETE FROM products WHERE id=$1 RETURNING *", [id]);
+            const RESULT = await pool.query("DELETE FROM products WHERE id_products=$1 RETURNING *", [id]);
             res.status(200).json(RESULT.rows[0]);
         }
     }catch (err){

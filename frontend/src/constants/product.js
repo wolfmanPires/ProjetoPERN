@@ -15,13 +15,17 @@ export const useProduct = create((set, get) => ({
     formData: {
         name: "",
         price:"",
-        image:""
+        image:"", 
+        stock:"",
+        description:""
     },
     setFormData: (formData) => {set({formData})},
     resetFormData: () => {set({formData: {
         name: "",
         price:"",
-        image:""
+        image:"", 
+        stock:"",
+        description:""
     }})},
 
     addProduct: async (e) => {
@@ -74,7 +78,9 @@ export const useProduct = create((set, get) => ({
             const cleanForm = {
                 name: resp.data[0].name,
                 price: resp.data[0].price,
-                image: resp.data[0].image
+                image: resp.data[0].image, 
+                stock: resp.data[0].stock,
+                description: resp.data[0].description
             };
             set({currProduct: resp.data, error:null, formData: cleanForm});
         }catch(err){

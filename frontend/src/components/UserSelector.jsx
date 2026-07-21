@@ -12,10 +12,12 @@ function UserSelector() {
   },[])
   const handleClick = () => {
     {/* Verifica se ja existe sessao iniciada. Caso sim, vai para o perfil do utilizador, caso nao, vai para a pagina de login */}
-    if (user){
-      navigate("/userProfile")
-    }else{
+    if (!user){
       navigate("/userLogin")
+    }else if (user.tipo === 'gestor'){
+      navigate("/gestorProfile")
+    }else if(user.tipo !== 'gestor'){
+      navigate("/userProfile")
     }
   }
   
@@ -23,9 +25,11 @@ function UserSelector() {
     <div className='flex justify-between items-center'>
       <button className='btn btn-ghost rounded-full' onClick={handleClick} disabled={loading}>
         <CircleUserRound className='size-5'/> {/* w-5 h-5 */} 
-        {
-          loading ? 'A carregar' : user ? user.nome : 'Iniciar Sessão'
-        }
+        <div className='hidden md:block'>
+          {
+            loading ? 'A carregar' : user ? user.nome : 'Conta Missão Saber'
+          }
+        </div>
       </button>
     </div>
   )

@@ -78,19 +78,36 @@ export const getExplicacaoByExplicando = async (req,res) => {
     }
 }
 
+//Receber explicacoes pelo id do explicando
+export const getExplicacoesGestores = async (req,res) => {
+
+    try {
+        const RESULT = await pool.query(
+            `SELECT e.id_explicacao, e.data_inicio, e.data_fim, e.lecionada, e.descricao, e.repete_mensal, e.origem_recorrencia_id, e.id_explicador, e.id_explicando, e.id_disciplina, ue.nome AS nome_explicador, ux.nome AS nome_explicando, d.nome AS nome_disciplina, d.ano
+            FROM explicacao e INNER JOIN explicador ex ON e.id_explicador = ex.id_explicador INNER JOIN utilizador ue ON ex.id_utilizador = ue.id_utilizador
+            INNER JOIN explicando ep ON e.id_explicando = ep.id_explicando INNER JOIN utilizador ux ON ep.id_utilizador = ux.id_utilizador
+            INNER JOIN disciplina d ON e.id_disciplina = d.id_disciplina ORDER BY e.data_inicio`);
+        res.status(200).json(RESULT.rows);
+    } catch (err) {
+        console.error("Erro detetado no getExplicacaoByExplicando do explicacaoController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no getExplicacaoByExplicando do explicacaoController.js"})
+    }
+}
+
 //////////
 /////POST
 //////////
 
 //criar uma nova explicacao na base de dados
 export const createExplicacao = async (req,res) => {
-    const {data_inicio,data_fim,lecionada,descricao,id_explicador,id_disciplina,id_explicando} = req.body;
+    const {data_inicio,data_fim,lecionada,descricao,repete_mensal,origem_recorrencia_id,id_explicador,id_disciplina,id_explicando} = req.body;
     
     try{
         if(!data_inicio || !data_fim || !id_explicador || !id_disciplina || !id_explicando){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("INSERT INTO explicacao (data_inicio, data_fim, lecionada, descricao, id_explicador, id_disciplina, id_explicando) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [data_inicio,data_fim,lecionada,descricao,id_explicador,id_disciplina,id_explicando]);
+            const RESULT = await pool.query("INSERT INTO explicacao (data_inicio, data_fim, lecionada, descricao, repete_mensal, origem_recorrencia_id, id_explicador, id_disciplina, id_explicando) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *", [data_inicio,data_fim,lecionada,descricao,repete_mensal,origem_recorrencia_id,id_explicador,id_disciplina,id_explicando]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
@@ -106,20 +123,39 @@ export const createExplicacao = async (req,res) => {
 
 //atualizar uma explicacao com os dados novos pelo id
 export const updateExplicacao = async (req,res) => {
-    const {data_inicio,data_fim,lecionada,descricao,id_explicador,id_disciplina,id_explicando} = req.body;
+    const {data_inicio,data_fim,lecionada,descricao,repete_mensal,origem_recorrencia_id,id_explicador,id_disciplina,id_explicando} = req.body;
     const {id} = req.params;
 
     try{
         if(!data_inicio || !data_fim || !id_explicador || !id_disciplina || !id_explicando || !id){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("UPDATE explicacao SET data_inicio=$1, data_fim=$2, lecionada=$3, descricao=$4, id_explicador=$5, id_disciplina=$6, id_explicando=$7 WHERE id_explicacao=$8 RETURNING *", [data_inicio,data_fim,lecionada,descricao,id_explicador,id_disciplina,id_explicando,id]);
+            const RESULT = await pool.query("UPDATE explicacao SET data_inicio=$1, data_fim=$2, lecionada=$3, descricao=$4, repete_mensal=$5, origem_recorrencia_id=$6, id_explicador=$7, id_disciplina=$8, id_explicando=$9 WHERE id_explicacao=$10 RETURNING *", [data_inicio,data_fim,lecionada,descricao,repete_mensal,origem_recorrencia_id,id_explicador,id_disciplina,id_explicando,id]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
         console.error("Erro detetado no updateExplicacao do explicacaoController.js: ",err);
         //Enviar codigo de erro interno de servidor 
         res.status(500).json({message: "Erro detetado no updateExplicacao do explicacaoController.js"})
+    }
+}
+
+//atualizar estado de recorrencia da explicacao
+export const updateExplicRecorrencia = async (req,res) => {
+    const {repete_mensal} = req.body;
+    const {id} = req.params;
+
+    try{
+        if(!repete_mensal){
+            res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
+        }else{
+            const RESULT = await pool.query("UPDATE explicacao SET repete_mensal WHERE id_explicacao=$2 RETURNING *", [repete_mensal,id]);
+            res.status(201).json(RESULT.rows[0]);
+        }
+    }catch (err){
+        console.error("Erro detetado no updateExplicRecorrencia do explicacaoController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no updateExplicRecorrencia do explicacaoController.js"})
     }
 }
 

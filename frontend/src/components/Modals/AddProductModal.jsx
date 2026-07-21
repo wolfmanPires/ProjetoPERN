@@ -1,6 +1,6 @@
 import React from 'react'
 import { useProduct } from '../../constants/product'
-import { EuroIcon, ImageIcon, Package2Icon, PlusCircleIcon } from 'lucide-react';
+import { Boxes, EuroIcon, ImageIcon, Package2Icon, PlusCircleIcon, SquarePen } from 'lucide-react';
 
 function AddProductModal() {
   const { formData, setFormData, resetFormData, addProduct, loading} = useProduct();
@@ -45,6 +45,38 @@ function AddProductModal() {
                         
                         <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/50'>
                             <EuroIcon className='size-5' />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Entrada do Stock*/}
+                <div className='form-control'>
+                    <label className='label'>
+                        <span className='label-text text-base font-medium'>Stock</span>
+                    </label>
+                    <div className='relative'>
+                        <input type='number' min="0" step="0.01" placeholder='0.00'
+                         className='input input-bordered w-full pl-10 py-3 focus:input-primary transition-colors duration-200'
+                         value={formData.stock} onChange={(e => setFormData({...formData, stock: e.target.value}))}/> 
+                        
+                        <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/50'>
+                            <Boxes className='size-5' />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Entrada da Descricao*/}
+                <div className='form-control'>
+                    <label className='label'>
+                        <span className='label-text text-base font-medium'>Descrição do Produto</span>
+                    </label>
+                    <div className='relative'>
+                        <input type='text' placeholder='Insira uma descrição...'
+                         className='input input-bordered w-full pl-10 py-3 focus:input-primary transition-colors duration-200'
+                         value={formData.description} onChange={(e => setFormData({...formData, description: e.target.value}))}/>
+                        
+                        <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/50'>
+                            <SquarePen className='size-5' />
                         </div>
                     </div>
                 </div>

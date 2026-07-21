@@ -25,7 +25,7 @@ function WeekCalendar({dia , explicList}) {
 
             <div className='space-y-2'>
               {explicList.filter((explic) => isSameDay(new Date(explic.data_inicio),dia)).map((explic) => 
-                <ExplicTimeCard key={explic.id_explicacao} explicacao={explic} page={"WeekCalendar"}/>
+                <ExplicTimeCard key={explic.id_explicacao} explicacao={explic} page={"CalendarHomePage"}/>
               )}
             </div>
           </div>

@@ -1,4 +1,4 @@
-import { BadgeEuro, CircleUserRound, NotebookPen } from 'lucide-react';
+import { BadgeEuro, ChevronLeft, CircleCheckBig, CircleUserRound, ClipboardPen, NotebookPen } from 'lucide-react';
 import React, { useState } from 'react'
 import BackButton from '../components/BackButton';
 import UserData from '../components/UserProfileTabs/UserData';
@@ -7,6 +7,8 @@ import UserExplicacoes from '../components/UserProfileTabs/UserExplicacoes';
 import { doLogin } from '../constants/loginRegister';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../constants/useAuth';
+import UserAvalFuturas from '../components/UserProfileTabs/UserAvalFuturas';
+import UserNotas from '../components/UserProfileTabs/UserNotas';
 
 function UserProfile() {
   const [activeTab, setActiveTab] = useState('utilizador');
@@ -19,9 +21,26 @@ function UserProfile() {
     navigate("/userLogin")
   } 
 
+  const handleGoBack = () => {
+    {/* Verifica se a pagina anterior e do site ou nao */}
+    const isInternalReferrer = document.referrer && document.referrer.startsWith(window.location.origin)
+
+    {/* Caso sim, volta para ela, caso nao, vai para a pagina principal de explicacoes*/}
+    if (isInternalReferrer){
+        navigate(-1)
+    }else{
+        navigate("/userHomePage")
+    }
+  }
+
   return (
     <main className='max-w-6xl mx-auto px-4 py-8'>
-      <BackButton />
+      <div className='mb-6'>
+        <button className='btn btn-ghost rounded-full' onClick={handleGoBack}>
+          <ChevronLeft className='size-8'/>
+          <div className='text-lg'>Voltar</div>
+        </button>
+      </div>
 
       <div className='grid grid-cols-2 w-full mb-4'>
         <h1 className='text-xl font-bold'>
@@ -50,12 +69,24 @@ function UserProfile() {
         <button className={`tab ${activeTab==='explicacoes' ? 'tab-active' : ''}`} onClick={() => setActiveTab('explicacoes')}>
           <NotebookPen className='size-4 mr-2' /> Explicações
         </button>
-      </div>
 
+        {/* Explicacoes */}
+        <button className={`tab ${activeTab==='avalFuturas' ? 'tab-active' : ''}`} onClick={() => setActiveTab('avalFuturas')}>
+          <ClipboardPen className='size-4 mr-2' /> Avaliações Futuras
+        </button>
+
+        {/* Explicacoes */}
+        <button className={`tab ${activeTab==='notas' ? 'tab-active' : ''}`} onClick={() => setActiveTab('notas')}>
+          <CircleCheckBig className='size-4 mr-2' /> Notas
+        </button>
+      </div>
+      
       {/* Conteudos de cada aba da pagina */}
       { activeTab === 'utilizador' && <UserData/> }
       { activeTab === 'pagamentos' && <UserPayments/> }
       { activeTab === 'explicacoes' && <UserExplicacoes/> }
+      { activeTab === 'avalFuturas' && <UserAvalFuturas/> }
+      { activeTab === 'notas' && <UserNotas/> }
 
     </main>
   )

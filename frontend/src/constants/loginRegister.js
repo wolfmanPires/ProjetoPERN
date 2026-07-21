@@ -7,6 +7,7 @@ export const doLogin = create((set, get) => ({
     loading: false,
     error: null,
     user:null,
+    storeUser:null,
 
     //Formulario de login e funcoes para tratar dele
     formData:{
@@ -15,6 +16,17 @@ export const doLogin = create((set, get) => ({
     },
     setFormData: (formData) => {set({formData})},
     resetFormData: () => {set({formData:{
+        email:"",
+        password:""
+    }})},
+
+    //Formulario de login da loja
+    storeFormData:{
+        email:"",
+        password:""
+    },
+    setStoreFormData: (storeFormData) => {set({storeFormData})},
+    resetStoreFormData: () => {set({storeFormData:{
         email:"",
         password:""
     }})},
@@ -31,7 +43,7 @@ export const doLogin = create((set, get) => ({
             toast.success(`Bem vindo ${response.data.user.nome}!`)
             return response.data.user;
         } catch (err) {
-            console.log("Erro ao dar login", err)
+            set({error: err})
             toast.error("Dados incorretos, por favor tente de novo.")
             return false;
         }finally{
@@ -45,10 +57,30 @@ export const doLogin = create((set, get) => ({
         try {
             await apiWithCreds.post("/api/logreg/logout")
             get().resetFormData()
-            set({loading: false, error: null, user:null})
+            get().resetStoreFormData()
+            set({loading: false, error: null, user:null, storeUser:null})
         } catch (err) {
-            console.error("Erro ao terminar sessão: ",err)
+            set({error: err, loading: false})
+        }
+    },
+
+    //Trata do login do utilizador da loja
+    verificaPassStore: async (e) => {
+        e.preventDefault(); //Impede a pagina de refrescar, permitindo usar dados do formulario 
+        set({loading: true});
+        try {
+            const {storeFormData} = get();
+            const response = await apiWithCreds.post("/api/logreg/loginStore",storeFormData);
+            get().resetStoreFormData();
+            set({storeUser:response.data.user})
+            toast.success(`Bem vindo ${response.data.user.nome}!`)
+            return response.data.user;
+        } catch (err) {
+            set({error: err})
+            toast.error("Dados incorretos, por favor tente de novo.")
+            return false;
+        }finally{
             set({loading: false})
         }
-    }
+    },
 }));

@@ -42,6 +42,7 @@ function ChoosePessoaModal({listPessoas,onSelectPessoa}) {
               <button type='submit' className='btn btn-primary min-w-30'>
                 {user.tipo === 'explicador' && 'Confirmar Explicando'}
                 {user.tipo === 'explicando' && 'Confirmar Explicador'}
+                {user.tipo === 'gestor' && 'Confirmar Utilizador'}
               </button>
           </div>
         </form>

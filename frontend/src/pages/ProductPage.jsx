@@ -36,7 +36,7 @@ function ProductPage() {
   
   return (
     <div className='container mx-auto px-4 py-8 max-w-4xl'>
-      <button onClick={() => navigate("/store")} className='btn btn-ghost mb-8'>
+      <button onClick={() => navigate("/store/storeGestor")} className='btn btn-ghost mb-8'>
         <ArrowLeftIcon className='size-4 mr-2'/>
         Voltar
       </button>
@@ -68,6 +68,14 @@ function ProductPage() {
                        value={formData.name} onChange={(e) => setFormData({...formData, name:e.target.value})}/>
               </div>
 
+              <div className='form-control'>
+                <label className='label'>
+                  <span className="label-text text-base font-medium">Descrição do Produto</span>
+                </label>
+                <input type="text" placeholder="Introduz nome de produto" className='input input-bordered w-full'
+                       value={formData.description} onChange={(e) => setFormData({...formData, description:e.target.value})}/>
+              </div>
+
               {/* Preco */}
               <div className='form-control'>
                 <label className='label'>
@@ -75,6 +83,15 @@ function ProductPage() {
                 </label>
                 <input type='number' min="0" step="0.01" placeholder='0.00' className='input input-bordered w-full'
                        value={formData.price} onChange={(e) => setFormData({...formData, price:e.target.value})}/>
+              </div>
+
+              {/* Stock */}
+              <div className='form-control'>
+                <label className='label'>
+                  <span className="label-text text-base font-medium">Stock do Produto</span>
+                </label>
+                <input type="number" placeholder='0' min="0" step="1" className='input input-bordered w-full'
+                       value={formData.stock} onChange={(e) => setFormData({...formData, stock:e.target.value})}/>
               </div>
 
               {/* URL da Imagem */}

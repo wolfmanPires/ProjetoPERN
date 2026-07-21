@@ -6,6 +6,9 @@ export const useAuth = create((set, get) => ({
     loading: false,
     error:  null,
     user:   null,
+    explicando: null,
+    avalFuturasData: [],
+    notasData: [],
     explicData: [],
     extraData: {
         especialidades: "",
@@ -219,6 +222,136 @@ export const useAuth = create((set, get) => ({
             })
             return null
         }
-    }
+    },
 
+    //Explicador pode ver todas as avaliacoes futuras dos explicandos com que ele tem explicacoes com
+    getAvalFuturasExplicador: async () => {
+        set({loading:true, error: null})
+
+        try {
+            const {user} = get()
+            const respExtra = await apiWithCreds.get(`/api/activeSession/explicadorFromUser/${user.id_utilizador}`)
+            const resp = await apiWithCreds.get(`/api/activeSession/getAllAvalFuturasOfExplicador/${respExtra.data[0].id_explicador}`)
+            set({
+                avalFuturasData: resp.data,
+                loading: false
+            })
+            return resp.data
+        } catch (err) {
+            set({
+                avalFuturasData: [],
+                error: err.response?.data?.message || "Erro ao receber avaliações futuras dos explicandos", loading: false
+            })
+            return null
+        }
+    },
+
+    //Explicando pode ver suas avaliacoes futuras 
+    getAvalFuturasExplicando: async () => {
+        set({loading:true, error: null})
+
+        try {
+            const {user} = get()
+            const resp = await apiWithCreds.get(`/api/activeSession/getAllAvalFuturasOfExplicando/${user.id_utilizador}`)
+            set({
+                avalFuturasData: resp.data,
+                loading: false
+            })
+            return resp.data
+        } catch (err) {
+            set({
+                avalFuturasData: [],
+                error: err.response?.data?.message || "Erro ao receber avaliações futuras dos explicandos", loading: false
+            })
+            return null
+        }
+    },
+
+    //receber dados de explicando
+    getExplicandoFromUser: async () => {
+        set({loading:true, error: null})
+
+        try {
+            const {user} = get()
+            const resp = await apiWithCreds.get(`/api/activeSession/explicandoFromUser/${user.id_utilizador}`)
+            set({
+                explicando: resp.data[0],
+                loading: false
+            })
+            return resp.data[0]
+        } catch (err) {
+            set({
+                avalFuturasData: [],
+                error: err.response?.data?.message || "Erro ao receber avaliações futuras dos explicandos", loading: false
+            })
+            return null
+        }
+    },
+
+    //Explicador pode ver todas as notas dos explicandos com que ele tem explicacoes com
+    getNotasExplicador: async () => {
+        set({loading:true, error: null})
+
+        try {
+            const {user} = get()
+            const respExtra = await apiWithCreds.get(`/api/activeSession/explicadorFromUser/${user.id_utilizador}`)
+            const resp = await apiWithCreds.get(`/api/activeSession/getAllNotasOfExplicador/${respExtra.data[0].id_explicador}`)
+            set({
+                notasData: resp.data,
+                loading: false
+            })
+            return resp.data
+        } catch (err) {
+            set({
+                notasData: [],
+                error: err.response?.data?.message || "Erro ao receber notas dos explicandos", loading: false
+            })
+            return null
+        }
+    },
+
+    //Explicando pode ver suas notas
+    getNotasExplicando: async () => {
+        set({loading:true, error: null})
+
+        try {
+            const {user} = get()
+            const resp = await apiWithCreds.get(`/api/activeSession/getAllNotasOfExplicando/${user.id_utilizador}`)
+            set({
+                notasData: resp.data,
+                loading: false
+            })
+            return resp.data
+        } catch (err) {
+            set({
+                notasData: [],
+                error: err.response?.data?.message || "Erro ao receber notas dos explicandos", loading: false
+            })
+            return null
+        }
+    },
+
+    //Alterar dados de utilizador
+    updateProfile: async (formData) => {
+        set({loading:true, error: null})
+
+        try {
+            const {user} = get()
+            const respUser = await apiWithCreds.put(`/api/utilizador/${user.id_utilizador}`,formData)
+            if(user.tipo === "explicador"){
+                const respExplic = await apiWithCreds.put(`/api/activeSession/updateExplicadorByUserID/${user.id_utilizador}`,formData)
+            }else if(user.tipo === "explicando"){
+                const respExplic = await apiWithCreds.put(`/api/activeSession/updateExplicandoByUserID/${user.id_utilizador}`,formData)
+            }
+            set({
+                loading: false
+            })
+            return respUser
+        } catch (err) {
+            set({
+                error: err.response?.data?.message || "Erro ao receber notas dos explicandos", loading: false
+            })
+            return null
+        }
+    }
 }))

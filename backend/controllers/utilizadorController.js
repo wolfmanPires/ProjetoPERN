@@ -37,6 +37,32 @@ export const getUtilizador = async (req,res) => {
     }
 }
 
+//receber utilizadores que sao gestores
+export const getUtilizadorAsGestores = async (req,res) => {
+
+    try{
+        const RESULT = await pool.query(`SELECT * FROM utilizador WHERE tipo='gestor'`);
+        res.status(200).json(RESULT.rows);
+    }catch (err){
+        console.error("Erro detetado no getUtilizadorAsGestores do utilizadorController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no getUtilizadorAsGestores do utilizadorController.js"})
+    }
+}
+
+//receber utilizadores (dados limitados)
+export const getUtilizadorLimited = async (req,res) => {
+
+    try{
+        const RESULT = await pool.query(`SELECT u.id_utilizador, u.nome, u.email, u.tipo, u.telemovel FROM utilizador u`);
+        res.status(200).json(RESULT.rows);
+    }catch (err){
+        console.error("Erro detetado no getUtilizadorAsGestores do utilizadorController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no getUtilizadorAsGestores do utilizadorController.js"})
+    }
+}
+
 //////////
 /////POST
 //////////
@@ -138,6 +164,25 @@ export const updateUtilizador = async (req,res) => {
         console.error("Erro detetado no updateUtilizador do utilizadorController.js: ",err);
         //Enviar codigo de erro interno de servidor 
         res.status(500).json({message: "Erro detetado no updateUtilizador do utilizadorController.js"})
+    }
+}
+
+//atualizar um utilizador so no nome, email e telemovel
+export const updateUtilizadorNET = async (req,res) => {
+    const {nome,email,telemovel} = req.body;
+    const {id} = req.params;
+
+    try{
+        if(!nome || !email || !telemovel || !id){
+            res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
+        }else{
+            const RESULT = await pool.query("UPDATE utilizador SET nome=$1, email=$2, telemovel=$3 WHERE id_utilizador=$4 RETURNING *", [nome,email,telemovel,id]);
+            res.status(201).json(RESULT.rows[0]);
+        }
+    }catch (err){
+        console.error("Erro detetado no updateUtilizadorNET do utilizadorController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no updateUtilizadorNET do utilizadorController.js"})
     }
 }
 

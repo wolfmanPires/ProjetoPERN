@@ -54,19 +54,35 @@ export const getPagamentosByUser = async (req,res) => {
     }
 }
 
+//receber pagamentos com dados de utilizador
+export const getAllPagamentosWithUtilizador = async (req,res) => {
+    try{
+        const RESULT = await pool.query(
+            `SELECT p.id_pagamento, p.data_vencimento, p.data_pago, p.valor, p.mes_referencia, p.id_utilizador, p.is_receita, u.nome, p.tipo AS pagamento_tipo, u.tipo AS utilizador_tipo
+            FROM pagamento p INNER JOIN utilizador u ON p.id_utilizador = u.id_utilizador
+            ORDER BY p.data_vencimento DESC;`
+        );
+        res.status(200).json(RESULT.rows);
+    }catch (err){
+        console.error("Erro detetado no getAllNotasWithUtilizador do notasController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no getAllNotasWithUtilizador do notasController.js"})
+    }
+}
+
 //////////
 /////POST
 //////////
 
 //criar um novo pagamento na base de dados
 export const createPagamento = async (req,res) => {
-    const {tipo,valor,data_vencimento,data_pago,id_utilizador} = req.body;
+    const {tipo,valor,is_receita,data_vencimento,data_pago,mes_referencia,id_utilizador} = req.body;
 
     try{
         if(!tipo || !valor || !data_vencimento || !id_utilizador){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("INSERT INTO pagamento (tipo, valor, data_vencimento, data_pago, id_utilizador) VALUES ($1, $2, $3, $4, $5) RETURNING *", [tipo,valor,data_vencimento,data_pago,id_utilizador]);
+            const RESULT = await pool.query("INSERT INTO pagamento (tipo, valor, is_receita, data_vencimento, data_pago, mes_referencia, id_utilizador) VALUES ($1, $2, $3, $4, $5, $6, $7) RETURNING *", [tipo,valor,is_receita,data_vencimento,data_pago,mes_referencia,id_utilizador]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
@@ -82,14 +98,14 @@ export const createPagamento = async (req,res) => {
 
 //atualizar um pagamento com os dados novos pelo id
 export const updatePagamento = async (req,res) => {
-    const {tipo,valor,data_vencimento,data_pago,id_utilizador} = req.body;
+    const {tipo,valor,is_receita,data_vencimento,data_pago,mes_referencia,id_utilizador} = req.body;
     const {id} = req.params;
 
     try{
         if(!tipo || !valor || !data_vencimento || !id_utilizador || !id){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("UPDATE pagamento SET tipo=$1, valor=$2, data_vencimento=$3, data_pago=$4, id_utilizador=$5 WHERE id_pagamento=$6 RETURNING *", [tipo,valor,data_vencimento,data_pago,id_utilizador,id]);
+            const RESULT = await pool.query("UPDATE pagamento SET tipo=$1, valor=$2, is_receita=$3, data_vencimento=$4, data_pago=$5, mes_referencia=$6, id_utilizador=$7 WHERE id_pagamento=$8 RETURNING *", [tipo,valor,is_receita,data_vencimento,data_pago,mes_referencia,id_utilizador,id]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){

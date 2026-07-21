@@ -1,12 +1,16 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import logoASAS from '../assets/ASASBGBranco.jpg'
 import logoMissao from '../assets/MissaoSaberBGAzul.png'
-import { ChevronLeft, KeyRound, Mail } from 'lucide-react';
+import { ChevronLeft, Eye, EyeClosed, KeyRound, Mail } from 'lucide-react';
 import BackButton from '../components/BackButton';
 import { doLogin } from '../constants/loginRegister';
 import { useNavigate } from 'react-router-dom';
 
 function ExplicLoginPage() {
+  const [isVisible, setIsVisible] = useState()
+  useEffect(() => {
+    setIsVisible(false)
+  },[])
   //Funcoes de login
   const {user, formData, setFormData, verificaPass, loading} = doLogin();
   //Trata da navegacao das paginas caso haja sucesso no login
@@ -26,9 +30,18 @@ function ExplicLoginPage() {
                 navigate("/gestorProfile")
             }else{
                 {/* Caso seja outro tipo de user, vai para a pagina de dashboard de explicacoes */}
-                navigate("/")
+                navigate("/userHomePage")
             }
         }
+    }
+  }
+
+  //Muda o botao de visibilidade
+  const handleVisibility = () => {
+    if(isVisible){
+      setIsVisible(false)
+    }else{
+      setIsVisible(true)
     }
   }
 
@@ -63,13 +76,17 @@ function ExplicLoginPage() {
                 {/* Entrada da password*/}
                 <div className='form-control'>
                     <div className='relative'>
-                        <input type='password' placeholder='Palavra-Passe'
+                        <input type={isVisible ? 'text' : 'password'} placeholder='Palavra-Passe'
                          className='input input-bordered w-full pl-10 py-3 focus:input-primary transition-colors duration-200'
                          value={formData.password} onChange={(e) => {setFormData({...formData, password:e.target.value})}}/> 
                         
                         <div className='absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-base-content/50'>
-                            <KeyRound className='size-5' />
+                          <KeyRound className='size-5' />
                         </div>
+                        <button type='button' className='absolute inset-y-0 right-3 flex items-center text-base-content/50' onClick={handleVisibility}>
+                          {isVisible && <Eye className='size-5' />}
+                          {!isVisible && <EyeClosed className='size-5' />}
+                        </button>
                     </div>
                 </div>
 

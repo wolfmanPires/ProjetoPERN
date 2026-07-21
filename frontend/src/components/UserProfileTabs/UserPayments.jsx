@@ -42,7 +42,7 @@ function UserPayments() {
                       <td>{pagamento.tipo}</td>
                       <td>{pagamento.valor}€</td>
                       <td>{dataFormat(pagamento.data_vencimento)}</td>
-                      <td>{dataFormat(pagamento.data_pago)}</td>
+                      <td>{pagamento.data_pago == null ? "-" : dataFormat(pagamento.data_pago)}</td>
                     </tr>
                   ))
                 )}

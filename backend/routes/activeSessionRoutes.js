@@ -1,8 +1,10 @@
 import express from "express"
-import { getExplicadorByUtilizador } from "../controllers/explicadorController.js";
-import { getExplicandoByUtilizador } from "../controllers/explicandoController.js";
+import { getExplicadorByUtilizador, updateExplicadorByUserID } from "../controllers/explicadorController.js";
+import { getExplicandoByUtilizador, updateExplicandoByUserID } from "../controllers/explicandoController.js";
 import { getExplicacaoByExplicador, getExplicacaoByExplicando, updateLecionada } from "../controllers/explicacaoController.js";
 import { getPagamentosByUser } from "../controllers/pagamentoController.js";
+import { getAllAvalFuturasOfExplicador, getAllAvalFuturasOfExplicando } from "../controllers/avaliacoes_futurasController.js";
+import { getAllNotasOfExplicador, getAllNotasOfExplicando } from "../controllers/notasController.js";
 
 const router = express.Router();
 
@@ -35,5 +37,23 @@ router.put("/editLecionada/:id_explicacao",updateLecionada)
 
 //Receber pagamentos pelo id do utilizador
 router.get("/pagamentosUserID/:id_utilizador", getPagamentosByUser)
+
+//Receber avaliacoes futuras dos explicandos associados a um explicador
+router.get("/getAllAvalFuturasOfExplicador/:id_explicador", getAllAvalFuturasOfExplicador)
+
+//Receber avaliacoes futuras de dado explicando
+router.get("/getAllAvalFuturasOfExplicando/:id", getAllAvalFuturasOfExplicando)
+
+//Receber avaliacoes futuras dos explicandos associados a um explicador
+router.get("/getAllNotasOfExplicador/:id", getAllNotasOfExplicador)
+
+//Receber notas de dado explicando
+router.get("/getAllNotasOfExplicando/:id", getAllNotasOfExplicando)
+
+//Explicador editar os seus dados
+router.put("/updateExplicadorByUserID/:id", updateExplicadorByUserID)
+
+//Explicando editar os seus dados
+router.put("/updateExplicandoByUserID/:id", updateExplicandoByUserID)
 
 export default router;
