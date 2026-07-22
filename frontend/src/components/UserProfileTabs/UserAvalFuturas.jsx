@@ -5,7 +5,7 @@ import { gestorAuth } from '../../constants/gestorAuth'
 import AddNotaModal from '../Modals/GestorNotas/AddNotaModal'
 import { useState } from 'react'
 import AddAvalFuturaExplicandoModal from '../Modals/AddAvalFuturaExplicandoModal'
-import ChoosePessoaModal from '../Modals/choosePessoaModal'
+import ChoosePessoaModal from '../Modals/ChoosePessoaModal'
 
 function UserAvalFuturas() {
   const {loading, user, explicando, avalFuturasData, explicData, getAvalFuturasExplicando, getAvalFuturasExplicador, getExplicandoFromUser, checkExplicacoes} = useAuth()

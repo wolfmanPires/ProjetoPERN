@@ -6,7 +6,7 @@ import WeekCalendar from '../CalendariosCustom/WeekCalendar'
 import ChooseDayModal from '../Modals/ChooseDayModal'
 import ChooseWeekModal from '../Modals/ChooseWeekModal'
 import ChooseMonthModal from '../Modals/ChooseMonthModal'
-import ChoosePessoaModal from '../Modals/choosePessoaModal'
+import ChoosePessoaModal from '../Modals/ChoosePessoaModal'
 import EditExplicModal from '../Modals/EditExplicModal'
 
 function UserExplicacoes() {
