@@ -38,6 +38,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 const PgSession = connectPgSimple(session);
+const isProduction = process.env.NODE_ENV === "production";
+
+// Deve aparecer antes do middleware de sessão
+if (isProduction) {
+    app.set("trust proxy", 1);
+}
 
 app.use(express.json());
 app.use(cors({
@@ -58,14 +64,11 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        secure: true, // false=http, true=https
-        sameSite: "none",
+        secure: isProduction, // false=http, true=https
+        sameSite: isProduction ? "none" : "lax",
         maxAge: 1000 * 60 * 60 * 24 // durar 1 so dia a cookie da sessao
     }
 }));
-
-//Para o Render mandar as cookies corretamente
-app.set("trust proxy", 1);
 
 //Routes para a loja
 app.use("/api/products", productRoutes);
