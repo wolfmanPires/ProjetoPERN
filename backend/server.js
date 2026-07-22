@@ -41,7 +41,7 @@ const PgSession = connectPgSimple(session);
 
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: ["http://localhost:5173","https://teu-site.onrender.com"],
     credentials: true
 }));
 app.use(helmet());
@@ -58,11 +58,14 @@ app.use(session({
     saveUninitialized: false,
     cookie: {
         httpOnly: true,
-        secure: false, // false=http, true=https
-        sameSite: "lax",
+        secure: true, // false=http, true=https
+        sameSite: "none",
         maxAge: 1000 * 60 * 60 * 24 // durar 1 so dia a cookie da sessao
     }
 }));
+
+//Para o Render mandar as cookies corretamente
+app.set("trust proxy", 1);
 
 //Routes para a loja
 app.use("/api/products", productRoutes);

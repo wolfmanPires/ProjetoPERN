@@ -6,12 +6,21 @@ const {Pool, types} = pg; //Vamos usar uma Pool em vez de um Client pois assim p
 types.setTypeParser(1114, (val) => val); //Remove horas de inverno, fica tempo universalizado
 types.setTypeParser(1184, (val) => val); //Remove horas de verao, fica tempo universalizado
 
-export const pool = new Pool({
-    host: process.env.PGHOST,
-    user: process.env.PGUSER,
-    password: process.env.PGPASSWORD,
-    database: process.env.PGDATABASE,
-    port: process.env.PGPORT
-});
+export const pool = new Pool(
+    process.env.DATABASE_URL
+        ? {
+              connectionString: process.env.DATABASE_URL,
+              ssl: {
+                  rejectUnauthorized: false
+              }
+          }
+        : {
+              host: process.env.PGHOST,
+              user: process.env.PGUSER,
+              password: process.env.PGPASSWORD,
+              database: process.env.PGDATABASE,
+              port: process.env.PGPORT
+          }
+);
 
 export default pool;
