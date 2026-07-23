@@ -14,6 +14,7 @@ function NavBar() {
           isCartDrawerOpen, openCartDrawer, closeCartDrawer, toggleCartDrawer, clearCarrinho } = useAuthStore()
   const {pathname} = useResolvedPath();
   const isStorePage = pathname.startsWith("/store")
+  const isStoreGestorPage = pathname.startsWith("/store/gestorProfile") || pathname.startsWith("/store/storeGestor");
   const navRef = useRef(null)
   const navigate = useNavigate()
 
@@ -143,7 +144,7 @@ function NavBar() {
               )}
 
               {/* Area de carrinho de compras */}
-              {isStorePage && (
+              {isStorePage && !isStoreGestorPage && (
                 <div className='drawer drawer-end'>
                   <input id="drawer-carrinho" type="checkbox" className="drawer-toggle" checked={isCartDrawerOpen} onChange={(e) => {
                     if(e.target.checked){

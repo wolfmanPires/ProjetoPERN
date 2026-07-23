@@ -59,7 +59,7 @@ export const useAuthStore = create((set, get) => ({
             const {userStore} = get()
             const resp = await apiWithCreds.get(`/api/activeStoreSession/getGestorByUserID/${userStore.id_utilizador_compras}`);
             set({
-                gestor: resp.data, 
+                gestor: resp.data[0], 
                 loading:false
             })
             return resp.data;

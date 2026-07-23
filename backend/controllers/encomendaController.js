@@ -54,6 +54,24 @@ export const getEncomendasFromUserID = async (req,res) => {
     }
 }
 
+//receber todas as encomendas e nomes dos seus utilizadores
+export const getAllEncomendasWithUsers = async (req, res) => {
+    try {
+        const result = await pool.query(`
+            SELECT e.id_encomenda, e.estado, e.total, e.data_encomenda, e.estado_pagamento, e.data_pagamento, e.observacoes, e.id_utilizador_compras, uc.nome AS nome_cliente, uc.email AS email_cliente, uc.telemovel AS telemovel_cliente
+            FROM encomenda e INNER JOIN utilizador_compras uc ON uc.id_utilizador_compras = e.id_utilizador_compras ORDER BY e.data_encomenda DESC
+        `);
+
+        return res.status(200).json(result.rows);
+    } catch (err) {
+        console.error("Erro ao obter encomendas:", err);
+
+        return res.status(500).json({
+            message: "Erro ao obter encomendas."
+        });
+    }
+};
+
 /////////
 /////POST
 /////////

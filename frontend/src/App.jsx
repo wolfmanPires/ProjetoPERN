@@ -23,6 +23,7 @@ import WaitConfirmEmailPage from './components/WaitConfirmEmailPage'
 import ResendConfirmEmail from './components/ResendConfirmEmail'
 import StoreRecupPass from './pages/StoreRecupPass'
 import StoreReporPass from './pages/StoreReporPass'
+import StoreGestorProfile from './pages/StoreGestorProfile'
 
 function App() {
   const {theme} = useTheme();
@@ -76,6 +77,11 @@ function App() {
         <Route path="/store/encomenda/:id" element={
           <ProtectedStoreRoute>
             <StoreEncomendaPage />
+          </ProtectedStoreRoute>
+        }/>
+        <Route path="/store/gestorProfile" element={
+          <ProtectedStoreRoute>
+            <StoreGestorProfile />
           </ProtectedStoreRoute>
         }/>
       </Routes>

@@ -37,6 +37,21 @@ export const getUtilizadorCompras = async (req,res) => {
     }
 }
 
+//receber utilizadores da loja e verifica se e gestor
+export const getUtilizadorGestor = async (req,res) => {
+    try {
+        const RESULT = await pool.query(`SELECT uc.*, g.id_gestor, CASE WHEN g.id_utilizador_compras IS NOT NULL THEN TRUE ELSE FALSE END AS is_gestor
+                FROM utilizador_compras uc LEFT JOIN gestor g ON uc.id_utilizador_compras = g.id_utilizador_compras ORDER BY uc.nome;`)
+        
+        res.status(200).json(RESULT.rows)
+        
+    } catch (err) {
+        console.error("Erro detetado no getUtilizadorGestor do utilizadorComprasController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no getUtilizadorGestor do utilizadorComprasController.js"})
+    }
+}
+
 /////////
 /////POST
 /////////
@@ -50,7 +65,7 @@ export const createUtilizadorCompras = async (req,res) => {
         if(!nome || !email || !telemovel || !password_hash){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query(`INSERT INTO utilizador_compras (nome, email, telemovel, password_hash) VALUES ($1, $2, $3, $4) RETURNING *`,[nome,email,telemovel,password_hash])
+            const RESULT = await pool.query(`INSERT INTO utilizador_compras (nome, email, telemovel, password_hash, email_verificado) VALUES ($1, $2, $3, $4, TRUE) RETURNING *`,[nome,email,telemovel,password_hash])
             res.status(201).json(RESULT.rows[0]);
         }
     } catch (err) {
@@ -123,6 +138,25 @@ export const updateUtilizadorCompras = async (req,res) => {
         console.error("Erro detetado no updateUtilizadorCompras do utilizadorComprasController.js: ",err);
         //Enviar codigo de erro interno de servidor 
         res.status(500).json({message: "Erro detetado no updateUtilizadorCompras do utilizadorComprasController.js"})
+    }
+}
+
+//atualizar um utilizador da loja com os dados novos pelo id, sem alterar a palavra-passe
+export const updateUtilizadorComprasPasswordless = async (req,res) => {
+    const {id} = req.params;
+    const {nome,email,telemovel} = req.body
+
+    try {
+        if(!nome || !email || !telemovel || !id){
+            res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
+        }else{
+            const RESULT = await pool.query(`UPDATE utilizador_compras SET nome=$1, email=$2, telemovel=$3 WHERE id_utilizador_compras=$4 RETURNING *`,[nome,email,telemovel,id])
+            res.status(201).json(RESULT.rows[0]);
+        }
+    } catch (err) {
+        console.error("Erro detetado no updateUtilizadorComprasPasswordless do utilizadorComprasController.js: ",err);
+        //Enviar codigo de erro interno de servidor 
+        res.status(500).json({message: "Erro detetado no updateUtilizadorComprasPasswordless do utilizadorComprasController.js"})
     }
 }
 

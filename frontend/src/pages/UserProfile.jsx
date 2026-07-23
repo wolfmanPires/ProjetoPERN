@@ -23,14 +23,7 @@ function UserProfile() {
 
   const handleGoBack = () => {
     {/* Verifica se a pagina anterior e do site ou nao */}
-    const isInternalReferrer = document.referrer && document.referrer.startsWith(window.location.origin)
-
-    {/* Caso sim, volta para ela, caso nao, vai para a pagina principal de explicacoes*/}
-    if (isInternalReferrer){
-        navigate(-1)
-    }else{
-        navigate("/userHomePage")
-    }
+    navigate("/userHomePage")
   }
 
   return (

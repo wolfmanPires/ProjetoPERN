@@ -330,3 +330,51 @@ export const reporPassword = async (req, res) => {
     client.release();
   }
 };
+
+//Funcao dos dados gerais da loja
+export const getStoreDashboard = async (req, res) => {
+  try {
+    const [totalProdutosResult, totalClientesResult, totalEncomendasResult, receitaTotalResult, encomendasPendentesResult, stockBaixoResult, ultimasEncomendasResult, produtosMaisVendidosResult] = await Promise.all([
+      // Total de produtos
+      pool.query(`SELECT COUNT(*)::INT AS total FROM products`),
+
+      // Total de clientes da loja
+      pool.query(`SELECT COUNT(*)::INT AS total FROM utilizador_compras`),
+
+      // Total de encomendas
+      pool.query(`SELECT COUNT(*)::INT AS total FROM encomenda`),
+
+      // Receita total, contando apenas pagamentos concluídos
+      pool.query(`SELECT COALESCE(SUM(total), 0)::NUMERIC(10, 2) AS total FROM encomenda WHERE estado_pagamento = 'pago' `),
+
+      // Encomendas que ainda necessitam de tratamento
+      pool.query(`SELECT COUNT(*)::INT AS total FROM encomenda WHERE estado IN ( 'pendente', 'em_preparacao', 'pronta_para_levantamento')`),
+
+      // Produtos com cinco ou menos unidades
+      pool.query(`SELECT id_products, name, image, price, stock FROM products WHERE stock <= 5 ORDER BY stock ASC, name ASC LIMIT 10`),
+
+      // Últimas encomendas com os dados do cliente
+      pool.query(`SELECT e.id_encomenda, e.estado, e.total, e.data_encomenda, e.estado_pagamento, uc.id_utilizador_compras, uc.nome AS nome_cliente, uc.email AS email_cliente
+        FROM encomenda e INNER JOIN utilizador_compras uc ON uc.id_utilizador_compras = e.id_utilizador_compras ORDER BY e.data_encomenda DESC LIMIT 5`),
+
+      // Produtos mais vendidos
+      pool.query(`SELECT ep.id_products, SUM(ep.quantidade)::INT AS quantidade_vendida, SUM(ep.quantidade * ep.preco_unitario)::NUMERIC(10, 2) AS receita_gerada
+                FROM encomenda_products ep INNER JOIN encomenda e ON e.id_encomenda = ep.id_encomenda WHERE e.estado_pagamento = 'pago'
+                GROUP BY ep.id_products ORDER BY quantidade_vendida DESC LIMIT 5`)]);
+
+        return res.status(200).json({
+            totalProdutos:totalProdutosResult.rows[0].total,
+            totalClientes:totalClientesResult.rows[0].total,
+            totalEncomendas:totalEncomendasResult.rows[0].total,
+            receitaTotal:Number(receitaTotalResult.rows[0].total),
+            encomendasPendentes:encomendasPendentesResult.rows[0].total,
+            stockBaixo:stockBaixoResult.rows,
+            ultimasEncomendas:ultimasEncomendasResult.rows,
+            produtosMaisVendidos:produtosMaisVendidosResult.rows
+        });
+    } catch (err) {
+      console.error("Erro ao obter dashboard da loja:",err);
+
+      return res.status(500).json({ message:"Ocorreu um erro ao obter os dados da dashboard da loja."});
+    }
+};

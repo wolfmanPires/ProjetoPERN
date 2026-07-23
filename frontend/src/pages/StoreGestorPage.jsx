@@ -1,19 +1,27 @@
 import React, { useEffect } from 'react'
 import { useProduct } from '../constants/product'
-import { PlusCircleIcon, RefreshCcwIcon } from 'lucide-react';
+import { CircleUserRound, PlusCircleIcon, RefreshCcwIcon } from 'lucide-react';
 import ProductCard from '../components/ProductCard';
 import AddProductModal from '../components/Modals/AddProductModal';
+import { useNavigate } from 'react-router-dom';
 
 function StoreGestorPage() {
   const {products, loading, error, fetchProducts} = useProduct();
+  const navigate = useNavigate()
   useEffect(() => {
     fetchProducts()
   },[fetchProducts])
   
   return (
     <main className='max-w-6xl mx-auto px-4 py-8'>
-      <div className='flex justify-between items-center mb-8'>
+      <div className='flex justify-center items-center mb-8'>
+        <button className='btn btn-accent rounded-full' onClick={() => navigate("/store/gestorProfile")} >
+          <CircleUserRound className='size-5 mr-2' />
+          Acesso Administrativo
+        </button>
+      </div>
 
+      <div className='flex justify-between items-center mb-8'>
         {/* Botao de Adicao */}
         <button className='btn btn-primary rounded-full' onClick={() => document.getElementById("addProductModal").showModal()} >
           <PlusCircleIcon className='size-5 mr-2' />

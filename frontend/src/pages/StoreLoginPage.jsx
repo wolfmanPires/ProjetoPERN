@@ -13,7 +13,7 @@ function StoreLoginPage() {
   },[])
   //Funcoes de login
   const {storeUser, storeFormData, setStoreFormData, verificaPassStore, loading} = doLogin();
-  const { checkUserStore } = useAuthStore();
+  const { checkUserStore, checkGestor} = useAuthStore();
   //Trata da navegacao das paginas caso haja sucesso no login
   const navigate = useNavigate();
   const handleLogin = async (e) => {
@@ -23,12 +23,17 @@ function StoreLoginPage() {
         const isInternalReferrer = document.referrer && document.referrer.startsWith(window.location.origin)
 
         await checkUserStore();
+        const isGestor = checkGestor()
 
         {/* Caso sim, volta para ela, caso nao, vai para a pagina principal da loja */}
         if (isInternalReferrer){
           navigate(-1)
         }else{
-          navigate("/store")
+          if(isGestor){
+            navigate("/store/storeGestor")
+          }else{
+            navigate("/store")
+          }
         }
     }
   }
