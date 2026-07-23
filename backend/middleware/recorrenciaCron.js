@@ -18,8 +18,8 @@ async function executarTarefa(nome, tarefa) {
 }
 
 //Codigo de cronometragem responsavel por criar explicacoes recorrentes de forma automatizada
-//"0 3 * * *" -> 0 minutos, as 3 horas, * todos os dias do mes, * todos os meses, * todos os dias da semana
-cron.schedule("0 3 * * *", async () => {
+//"0 3 * * *" -> 0 minutos, das 3 horas, * todos os dias do mes, * todos os meses, * todos os dias da semana
+cron.schedule("0 8-18 * * *", async () => {
     await executarTarefa("Gerar Explicações Recorrentes", gerarExplicacoesRecorrentes)
 })
 
