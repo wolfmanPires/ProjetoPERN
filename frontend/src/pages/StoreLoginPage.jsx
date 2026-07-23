@@ -29,7 +29,7 @@ function StoreLoginPage() {
         if (isInternalReferrer){
           navigate(-1)
         }else{
-          if(isGestor != []){
+          if(isGestor.length > 0){
             navigate("/store/storeGestor")
           }else{
             navigate("/store")
