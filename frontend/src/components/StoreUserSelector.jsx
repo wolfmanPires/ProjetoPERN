@@ -15,7 +15,7 @@ function StoreUserSelector() {
     if (!userStore){
       navigate("/storeLogin")
     }else {
-      if(gestor.length > 0){
+      if(gestor){
         navigate("/store/storeGestor")
       }else{
         navigate("/store/userPage")
