@@ -261,15 +261,9 @@ export const gestorAuth = create((set,get) => ({
             const {newUtilizador, newExplicador} = get()
 
             if(newUtilizador.password != ""){
-                await apiWithCreds.put(`/api/utilizador/${id_utilizador}`,{
-                ...newUtilizador,
-                tipo: "explicador"
-            })
+                await apiWithCreds.put(`/api/utilizador/${id_utilizador}`,newUtilizador)
             }else{
-                await apiWithCreds.put(`/api/gestorSession/gestorUpdateUtilizador/${id_utilizador}`,{
-                ...newUtilizador,
-                tipo: "explicador"
-            })
+                await apiWithCreds.put(`/api/gestorSession/gestorUpdateUtilizador/${id_utilizador}`,newUtilizador)
             }
             await apiWithCreds.put(`/api/explicador/${id_explicador}`,{
                 ...newExplicador,
@@ -356,15 +350,9 @@ export const gestorAuth = create((set,get) => ({
             const {newUtilizador, newExplicando} = get()
 
             if(newUtilizador.password != ""){
-                await apiWithCreds.put(`/api/utilizador/${id_utilizador}`,{
-                ...newUtilizador,
-                tipo: "explicando"
-            })
+                await apiWithCreds.put(`/api/utilizador/${id_utilizador}`,newUtilizador)
             }else{
-                await apiWithCreds.put(`/api/gestorSession/gestorUpdateUtilizador/${id_utilizador}`,{
-                ...newUtilizador,
-                tipo: "explicando"
-            })
+                await apiWithCreds.put(`/api/gestorSession/gestorUpdateUtilizador/${id_utilizador}`,newUtilizador)
             }
             await apiWithCreds.put(`/api/explicando/${id_explicando}`,{
                 ...newExplicando,

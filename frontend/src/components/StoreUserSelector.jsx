@@ -8,15 +8,14 @@ function StoreUserSelector() {
   const navigate = useNavigate();
   useEffect(() => {
     checkUserStore()
+    checkGestor()
   },[])
   const handleClick = async () => {
     {/* Verifica se ja existe sessao iniciada. Caso sim, vai para o perfil do utilizador, caso nao, vai para a pagina de login */}
     if (!userStore){
       navigate("/storeLogin")
     }else {
-      const isGestor  = await checkGestor();
-
-      if(Array.isArray(isGestor) && isGestor .length > 0){
+      if(gestor != null){
         navigate("/store/storeGestor")
       }else{
         navigate("/store/userPage")

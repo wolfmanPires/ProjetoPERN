@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { gestorAuth } from '../../constants/gestorAuth';
 import ChooseMonthModal from '../Modals/ChooseMonthModal';
 import { endOfWeek, isSameMonth, isSameWeek, isSameYear, startOfWeek } from 'date-fns';
-import ChoosePessoaModal from '../Modals/ChoosePessoaModal';
+import ChoosePessoaModal from '../Modals/choosePessoaModal';
 import ChooseWeekModal from '../Modals/ChooseWeekModal';
 import AddPagamentoModal from '../Modals/GestorPagamentos/AddPagamentoModal';
 import EditPagamentoModal from '../Modals/GestorPagamentos/EditPagamentoModal';

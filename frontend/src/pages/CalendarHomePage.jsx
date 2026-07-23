@@ -9,7 +9,7 @@ import { useAuth } from '../constants/useAuth';
 import { isSameDay, isSameWeek, startOfWeek, endOfWeek } from "date-fns";
 import EditExplicModal from '../components/Modals/EditExplicModal';
 import WeekCalendar from '../components/CalendariosCustom/WeekCalendar';
-import ChoosePessoaModal from '../components/Modals/ChoosePessoaModal';
+import ChoosePessoaModal from '../components/Modals/choosePessoaModal';
 
 function CalendarHomePage() {
   const [selected, setSelected] = useState(new Date());

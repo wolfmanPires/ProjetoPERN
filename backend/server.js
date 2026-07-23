@@ -29,6 +29,7 @@ import encomendaRoutes from "./routes/encomendaRoutes.js"
 import encomendaProductsRoutes from "./routes/encomenda_productsRoutes.js"
 import activeStoreSessionRoutes from "./routes/activeStoreSessionRoutes.js"
 import storeAuthRoutes from "./routes/storeAuthRoutes.js"
+import gestorStoreSessionRoutes from "./routes/gestorStoreSession.js"
 
 //Configuracao das ligacoes e verificacoes da BD
 import pool from "./config/db.js"
@@ -79,6 +80,7 @@ app.use("/api/carrinhoProducts", carrinhoProductsRoutes);
 app.use("/api/encomenda", encomendaRoutes);
 app.use("/api/encomendaProducts", encomendaProductsRoutes);
 app.use("/api/activeStoreSession", activeStoreSessionRoutes);
+app.use("/api/gestorStoreSession", gestorStoreSessionRoutes);
 app.use("/api/store-auth", storeAuthRoutes);
 
 //Routes para o centro

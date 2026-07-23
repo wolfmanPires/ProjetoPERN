@@ -5,7 +5,7 @@ import { gestorAuth } from '../../constants/gestorAuth'
 import AddNotaModal from '../Modals/GestorNotas/AddNotaModal'
 import { useState } from 'react'
 import AddNotaExplicandoModal from '../Modals/AddNotaExplicandoModal'
-import ChoosePessoaModal from '../Modals/ChoosePessoaModal'
+import ChoosePessoaModal from '../Modals/choosePessoaModal'
 
 function UserNotas() {
   const {loading, user, explicando, notasData, explicData, checkExplicacoes, getNotasExplicando, getNotasExplicador, getExplicandoFromUser} = useAuth()

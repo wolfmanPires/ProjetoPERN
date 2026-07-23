@@ -1,5 +1,5 @@
 import express from "express";
-import { registarUtilizadorCompras, confirmarEmail, reenviarConfirmacao, pedirRecuperacaoPassword, reporPassword } from "../controllers/storeAuthController.js";
+import { registarUtilizadorCompras, confirmarEmail, reenviarConfirmacao, pedirRecuperacaoPassword, reporPassword, getStoreDashboard } from "../controllers/storeAuthController.js";
 
 const router = express.Router();
 
@@ -17,5 +17,8 @@ router.post("/pedir-recuperacao-password", pedirRecuperacaoPassword);
 
 //recebe os dados para dar reset a password, e apos validacao destes muda-la
 router.post("/repor-password", reporPassword);
+
+//recebe os dados da dashboard
+router.get("/obterDashboard", getStoreDashboard);
 
 export default router;
