@@ -53,7 +53,7 @@ export const useAuthStore = create((set, get) => ({
 
     //Funcao para verificar se o user e gestor
     checkGestor: async () => {
-        set({loading: true, error:null})
+        set({loading: true, error:null, gestor: null})
 
         try {
             const {userStore} = get()
