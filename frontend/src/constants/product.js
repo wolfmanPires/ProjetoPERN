@@ -1,8 +1,7 @@
 import axios from "axios";
 import toast from "react-hot-toast";
 import { create } from "zustand";
-
-const BASE_URL = "http://localhost:3001"
+import apiWithCreds from "./axiosWithCreds.js";
 
 export const useProduct = create((set, get) => ({
     //Estado dos produtos
@@ -33,7 +32,7 @@ export const useProduct = create((set, get) => ({
         set({loading: true});
         try {
             const {formData} = get()
-            await axios.post(`${BASE_URL}/api/products`, formData);
+            await apiWithCreds.post(`/api/products`, formData);
             await get().fetchProducts();
             get().resetFormData();
             toast.success("Produto adicionado com sucesso!")
@@ -49,7 +48,7 @@ export const useProduct = create((set, get) => ({
     fetchProducts: async () => {
         set({loading:true});
         try{
-            const resp = await axios.get(`${BASE_URL}/api/products`);
+            const resp = await apiWithCreds.get(`/api/products`);
             set({products: resp.data, error:null});
         }catch(err){
             set({error: "Erro ao resgatar produto, por favor contacte um técnico."})
@@ -61,7 +60,7 @@ export const useProduct = create((set, get) => ({
     deleteProduct: async (id) => {
         set({loading:true});
         try {
-            await axios.delete(`${BASE_URL}/api/products/${id}`);
+            await apiWithCreds.delete(`/api/products/${id}`);
             set(prev => ({products: prev.products.filter(product => product.id !== id)})); {/* Filtra fora da cache o produto apagado (poupando dados do refresh) */}
             toast.success("Produto apagado com sucesso!")
         } catch (err) {
@@ -74,7 +73,7 @@ export const useProduct = create((set, get) => ({
     fetchProduct: async (id) => {
         set({loading:true});
         try{
-            const resp = await axios.get(`${BASE_URL}/api/products/${id}`);
+            const resp = await apiWithCreds.get(`/api/products/${id}`);
             const cleanForm = {
                 name: resp.data[0].name,
                 price: resp.data[0].price,
@@ -95,7 +94,7 @@ export const useProduct = create((set, get) => ({
         set({loading: true});
         try {
             const {formData} = get()
-            const resp = await axios.put(`${BASE_URL}/api/products/${id}`, formData);
+            const resp = await apiWithCreds.put(`/api/products/${id}`, formData);
             set({currProduct: resp.data})
             toast.success("Produto editado com sucesso!")
         } catch (err) {
