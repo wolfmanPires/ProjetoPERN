@@ -24,13 +24,12 @@ function StoreLoginPage() {
 
         await checkUserStore();
         const isGestor = checkGestor()
-        console.log(isGestor)
 
         {/* Caso sim, volta para ela, caso nao, vai para a pagina principal da loja */}
         if (isInternalReferrer){
           navigate(-1)
         }else{
-          if(isGestor){
+          if(isGestor != []){
             navigate("/store/storeGestor")
           }else{
             navigate("/store")
