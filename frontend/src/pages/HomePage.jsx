@@ -69,7 +69,7 @@ function HomePage() {
       </section>
 
       {/* Carousel de Novidades */}
-      <section className="w-full py-10 px-4" onMouseEnter={() => clearInterval(timerRef.current)} onMouseLeave={iniciarTimer}>
+      <section className="w-full px-4" onMouseEnter={() => clearInterval(timerRef.current)} onMouseLeave={iniciarTimer}>
         <div className="relative mx-auto w-full max-w-sm sm:max-w-md">
           {/* Janela do carousel */}
           <div className="overflow-hidden rounded-2xl">
