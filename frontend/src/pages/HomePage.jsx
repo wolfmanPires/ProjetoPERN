@@ -68,6 +68,40 @@ function HomePage() {
         <img src={heroImg} alt="ASAS — Associação Social Acreditar e Sonhar" className="block w-full max-w-full h-full object-contain"/>
       </section>
 
+      {/* Carousel de Novidades */}
+      <section className="w-full py-10 px-4" onMouseEnter={() => clearInterval(timerRef.current)} onMouseLeave={iniciarTimer}>
+        <div className="relative mx-auto w-full max-w-sm sm:max-w-md">
+          {/* Janela do carousel */}
+          <div className="overflow-hidden rounded-2xl">
+            {/* Faixa que contem todos os slides */}
+            <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${slideAtual * 100}%)` }}>
+              {slides.map((img, index) => (
+                <div key={index} className="w-full shrink-0 flex justify-center">
+                  <img src={img} alt={`Novidade ${index + 1}`} className="block w-full h-auto object-contain"/>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Botão anterior */}
+          <button type="button" className=" btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2 z-10" onClick={slideAnterior}aria-label="Slide anterior">
+            <ChevronLeft className="size-5" />
+          </button>
+
+          {/* Botão seguinte */}
+          <button type="button" className="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2 z-10" onClick={slideSeguinte} aria-label="Slide seguinte">
+            <ChevronRight className="size-5" />
+          </button>
+        </div>
+
+        {/* Indicadores */}
+        <div className="flex justify-center gap-2 mt-4">
+          {slides.map((_, index) => (
+            <button key={index} type="button" aria-label={`Ir para o slide ${index + 1}`} className={`h-3 w-3 rounded-full transition-all ${slideAtual === index ? "bg-primary scale-110" : "bg-base-300"}`} onClick={() => {setSlideAtual(index); iniciarTimer();}}/>
+          ))}
+        </div>
+      </section>
+
       {/* Navbar (posicao personalizada) */}
       <NavBar />
 
@@ -102,40 +136,6 @@ function HomePage() {
 
       {/* Serviços */}
       <img src={servicosImg} alt="Serviços" className="w-full object-cover"/>
-
-      {/* Carousel de Novidades */}
-      <section className="w-full py-10 px-4" onMouseEnter={() => clearInterval(timerRef.current)} onMouseLeave={iniciarTimer}>
-        <div className="relative mx-auto w-full max-w-sm sm:max-w-md">
-          {/* Janela do carousel */}
-          <div className="overflow-hidden rounded-2xl">
-            {/* Faixa que contem todos os slides */}
-            <div className="flex transition-transform duration-500 ease-in-out" style={{ transform: `translateX(-${slideAtual * 100}%)` }}>
-              {slides.map((img, index) => (
-                <div key={index} className="w-full shrink-0 flex justify-center">
-                  <img src={img} alt={`Novidade ${index + 1}`} className="block w-full h-auto object-contain"/>
-                </div>
-              ))}
-            </div>
-          </div>
-
-          {/* Botão anterior */}
-          <button type="button" className=" btn btn-circle btn-sm absolute left-2 top-1/2 -translate-y-1/2 z-10" onClick={slideAnterior}aria-label="Slide anterior">
-            <ChevronLeft className="size-5" />
-          </button>
-
-          {/* Botão seguinte */}
-          <button type="button" className="btn btn-circle btn-sm absolute right-2 top-1/2 -translate-y-1/2 z-10" onClick={slideSeguinte} aria-label="Slide seguinte">
-            <ChevronRight className="size-5" />
-          </button>
-        </div>
-
-        {/* Indicadores */}
-        <div className="flex justify-center gap-2 mt-4">
-          {slides.map((_, index) => (
-            <button key={index} type="button" aria-label={`Ir para o slide ${index + 1}`} className={`h-3 w-3 rounded-full transition-all ${slideAtual === index ? "bg-primary scale-110" : "bg-base-300"}`} onClick={() => {setSlideAtual(index); iniciarTimer();}}/>
-          ))}
-        </div>
-      </section>
 
       {/* Onde estamos */}
       <section className="max-w-6xl mx-auto px-4 py-16">
