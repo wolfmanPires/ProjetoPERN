@@ -2,12 +2,13 @@ import React, { useEffect, useRef, useState } from 'react'
 import LocationCard from '../components/LocationCard';
 import SocialGroup from '../components/SocialGroup';
 import PartnerCard from '../components/PartnerCard';
-import { ChevronDown, ChevronLeft, ChevronRight, ChevronsDown } from 'lucide-react';
+import { ArrowDown, ChevronDown, ChevronLeft, ChevronRight, ChevronsDown } from 'lucide-react';
 import NavBar from '../components/NavBar';
 
 //imports das imagens
 import heroImg from "../assets/int-bgless.png";
-import heroCardImg from "../assets/int-3.png"
+import heroMobileImg from "../assets/int-bgless-mobile.png";
+import heroCardImg from "../assets/int-3.png";
 import quemSomosImg from "../assets/alunaSquared.jpg";
 import servicosImg from "../assets/servicos.jpg";
 import locRuilheImg from "../assets/missaoSaberSquared.jpg";
@@ -64,12 +65,18 @@ function HomePage() {
   return (
     <main className="w-full bg-base-100">
       {/* Ecra de logotipo */}
-      <section className="w-full h-[55vh] sm:h-[65vh] md:h-[80vh] flex items-center justify-center overflow-hidden">
-        <img src={heroImg} alt="ASAS — Associação Social Acreditar e Sonhar" className="block w-full max-w-full h-full object-contain"/>
+      <section className="w-full h-[55vh] sm:h-[65vh] md:h-[80vh] xl:h-[40vh] flex items-center justify-center overflow-hidden">
+        <picture>
+          {/* Mobile */}
+          <source media='(max-width: 767px)' srcSet={heroMobileImg} />
+
+          {/* Desktop */}
+          <img src={heroImg} alt="ASAS — Associação Social Acreditar e Sonhar" className="w-full h-full object-contain"/>
+        </picture>
       </section>
 
       {/* Carousel de Novidades */}
-      <section className="w-full px-4" onMouseEnter={() => clearInterval(timerRef.current)} onMouseLeave={iniciarTimer}>
+      <section className="w-full py-8 px-4" onMouseEnter={() => clearInterval(timerRef.current)} onMouseLeave={iniciarTimer}>
         <div className="relative mx-auto w-full max-w-sm sm:max-w-md">
           {/* Janela do carousel */}
           <div className="overflow-hidden rounded-2xl">
@@ -102,20 +109,23 @@ function HomePage() {
         </div>
       </section>
 
+      {/* Botao de indicacao de scroll para baixo */}
+      <div className='w-full'>
+        <button className='w-full' onClick={() => window.scrollTo({ top: innerHeight-50, behavior: "smooth" })}>
+          <div className='flex items-center justify-center'>
+            <ArrowDown className='size-10 animate-bounce'/>
+          </div>
+        </button>
+      </div>
+
       {/* Navbar (posicao personalizada) */}
       <NavBar />
 
       {/* Quem Somos */}
-      <div className='bg-primary'>
-        <button className='w-full' onClick={() => window.scrollTo({ top: innerHeight-50, behavior: "smooth" })}>
-          <div className='flex items-center justify-center'>
-            <ChevronDown color='#ffffff' className='size-10'/>
-          </div>
-        </button>
-      <section className="max-w-6xl mx-auto px-4 py-16 ">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
-          <img src={quemSomosImg} alt="Quem Somos" className="w-full rounded-2xl shadow-lg"/>
-
+      <div className='bg-primary'>  
+        <section className="max-w-6xl mx-auto px-4 py-16 ">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 items-center">
+            <img src={quemSomosImg} alt="Quem Somos" className="w-full rounded-2xl shadow-lg"/>
           <div>
             <h1 className="text-4xl md:text-5xl font-bold text-base-100 mb-6">
               Quem Somos?
