@@ -149,15 +149,15 @@ export const logout = async (req,res) => {
 
 //atualizar um utilizador com os dados novos pelo id
 export const updateUtilizador = async (req,res) => {
-    const {nome,email,telemovel,tipo,password} = req.body;
+    const {nome,email,telemovel,password} = req.body;
     const {id} = req.params;
     const password_hash = await argon2.hash(password);
 
     try{
-        if(!nome || !email || !telemovel || !tipo || !id){
+        if(!nome || !email || !telemovel || !id){
             res.status(400).json({message: "Dados formatados incorretamente, por favor verifique se falta algo e re-envie"})
         }else{
-            const RESULT = await pool.query("UPDATE utilizador SET nome=$1, email=$2, telemovel=$3, tipo=$4, password_hash=$5 WHERE id_utilizador=$6 RETURNING *", [nome,email,telemovel,tipo,password_hash,id]);
+            const RESULT = await pool.query("UPDATE utilizador SET nome=$1, email=$2, telemovel=$3, password_hash=$4 WHERE id_utilizador=$5 RETURNING *", [nome,email,telemovel,password_hash,id]);
             res.status(201).json(RESULT.rows[0]);
         }
     }catch (err){
